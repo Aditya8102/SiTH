@@ -34,7 +34,7 @@ def parse_options():
     global_group.add_argument(
         "--exp_name",
         type=str,
-        default="train-hallucination",
+        default="train-inpainting",
         help="Experiment name for logging. Will default to test",
     )
     global_group.add_argument("--seed", type=int, default=None, help="A seed for reproducible training.")

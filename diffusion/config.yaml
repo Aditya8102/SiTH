@@ -1,7 +1,7 @@
 global:
   pretrained_model_name_or_path: 'kxic/zero123-xl'
   output_dir: '../checkpoints'
-  exp_name: 'train-hallucination'
+  exp_name: 'train-inpainting'
   seed: 2434
 
 dataset:
@@ -13,17 +13,17 @@ dataset:
   white_background: False
 
 training:
-  train_batch_size: 4
-  num_train_epochs: 1000
-  checkpointing_steps: 2500
+  train_batch_size: 1
+  num_train_epochs: 1
+  checkpointing_steps: 5
 
 validation:
   validation: True
   test: True
   num_gen_images: 4
   num_validation_images: 4
-  validation_steps: 1000
-  test_steps: 2500
+  validation_steps: 1
+  test_steps: 5
 
 network:
   drop_prob: 0.05

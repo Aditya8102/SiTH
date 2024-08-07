@@ -10,7 +10,7 @@ import wandb
 from diffusers import (
     UniPCMultistepScheduler,
 )
-from .pipeline import BackHallucinationPipeline
+from .pipeline import InpaintingPipeline
 
 def tensor_to_np(image):
     image = (image / 2 + 0.5).clamp(0, 1)
@@ -79,7 +79,7 @@ def test_pipeline(logger, test_dataloader, vae, clip_image_encoder, unet, contro
     unet = accelerator.unwrap_model(unet)
     refer_clip_proj = accelerator.unwrap_model(refer_clip_proj)
 
-    pipeline = BackHallucinationPipeline(
+    pipeline = InpaintingPipeline(
         vae=vae,
         clip_image_encoder=clip_image_encoder,
         unet=unet,
@@ -123,7 +123,7 @@ def log_validation(logger, val_dataloader, vae, clip_image_encoder, unet, contro
     unet = accelerator.unwrap_model(unet)
     refer_clip_proj = accelerator.unwrap_model(refer_clip_proj)
 
-    pipeline = BackHallucinationPipeline(
+    pipeline = InpaintingPipeline(
         vae=vae,
         clip_image_encoder=clip_image_encoder,
         unet=unet,
@@ -161,7 +161,7 @@ def log_validation(logger, val_dataloader, vae, clip_image_encoder, unet, contro
             {
             "src_images" : tensor_to_np(data['src_image']),
             "uv_images":  tensor_to_np(data['tgt_uv']),
-            "gt_images": tensor_to_np(data['tgt_image']),
+            "gt_images": tensor_to_np(data['src_image']),
             "images": ims})
 
 
@@ -188,9 +188,9 @@ def log_validation(logger, val_dataloader, vae, clip_image_encoder, unet, contro
                 images = log["images"]
                 src_images = log["src_images"]
                 uv_images = log["uv_images"]
-                tgt_images = log["gt_images"]
+                src_images = log["gt_images"]
 
-                formatted_images.append(wandb.Image(tgt_images[0], caption="Ground truth images"))
+                formatted_images.append(wandb.Image(src_images[0], caption="Ground truth images"))
                 formatted_images.append(wandb.Image(uv_images[0], caption="Controlnet uv images"))
                 formatted_images.append(wandb.Image(src_images[0], caption="src_images"))
 
